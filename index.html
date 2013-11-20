@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Red Baron!</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="engine.js"></script>
+	<script src="asset_manager.plugin.js"></script>
+	<script src="main.js"></script>
+	<script type="text/javascript">
+		window.onclick = function(event) {
+			console.log(event);
+		}
+
+		window.onkeypress = function(event) {
+			if(event.keyCode == 97) {
+				console.log("AAAA!");
+			}
+		}
+	</script>
+</head>
+<body>
+	<canvas id="crtez" width="640" height="480">
+		U ovom browseru ne radi canvas.
+	</canvas>
+</body>
+</html>
