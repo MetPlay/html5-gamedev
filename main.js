@@ -9,12 +9,25 @@ window.onload = function() {
 
 	engine.plugins.asset_manager.init(function() {
 		engine.self(function() {
-			for(var i = 0; i < 100; i++) {
-				var d1 = engine.plugins.scene.stage.addChild(
-					engine.plugins.scene.createTransform("damir"));
+			engine.plugins.scene.stage.render = function(self, drawing) {
+				drawing.context.fillStyle = "red";
+				drawing.context.fillRect(0, 0, drawing.canvas.width, drawing.canvas.height);
+			}
 
-				d1.position.x = Math.random() * 600;
-				d1.position.y = Math.random() * 500;
+			for(var i = 0; i < 100; i++) {
+				engine.plugins.scene.stage.addChild({
+					position : { 
+						x : Math.random() * engine.drawing.canvas.width,
+						y : Math.random() * engine.drawing.canvas.height
+					},
+					name : "Damir",
+					image : "damir",
+					tag : { 
+						rotation_speed : Math.random()
+					}			
+				}).update = function(self) {
+					self.rotation += self.tag.rotation_speed;
+				};
 			}
 		});
 	});

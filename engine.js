@@ -1,3 +1,4 @@
+
 var engine = {
 	config : {},
 	drawing : {},
@@ -5,7 +6,7 @@ var engine = {
 
 	// CONTENT PIPELINE
 
-	self : function(callback) {		
+	self : function(callback) {
 		var fitWindow = function(element) {
 			element.width = window.innerWidth;
 			element.height = window.innerHeight;
@@ -14,13 +15,17 @@ var engine = {
 		engine.drawing.canvas = document.getElementById('crtez');
 		engine.drawing.context = engine.drawing.canvas.getContext("2d");
 
-		window.onresize = function() {
+		var fixWindow = function() {
 			fitWindow(engine.drawing.canvas);
 			if(engine.plugins.scene && 
 				engine.plugins.scene.render)
 				engine.plugins.scene.render();
 		};
+
+		window.onresize = fixWindow;
+
+		fixWindow();
 		callback();
-		window.onresize();
+		fixWindow();
 	}
 }
