@@ -19,24 +19,25 @@ engine.plugins.input = {
 	},
 	
 	onMouseMove : function(event) {
-		var e = engine.plugins.input.createInputEvent(event);
+		var e = engine.plugins.input.createInputEvent(event, undefined);
 		engine.plugins.input.mouse_position.x = e.x;
 		engine.plugins.input.mouse_position.y = e.y;
 	},
 
 	onMouseDown : function(event) {
-		var e = engine.plugins.input.createInputEvent(event);
-		engine.plugins.input.buttons[e.button] = 0;
+		var e = engine.plugins.input.createInputEvent(event, true);
+		engine.plugins.input.buttons[e.button] = 1;
 		engine.plugins.scene.mouse(e, true);
 	},
 
 	onMouseUp : function(event) {
-		var e = engine.plugins.input.createInputEvent(event);
+		var e = engine.plugins.input.createInputEvent(event, false);
+		engine.plugins.input.buttons[e.button] = 0;		
 		engine.plugins.scene.mouse(e, false);
 	},
 
 	onKeyPress : function(event) {
-		var e = engine.plugins.input.createInputEvent(event);
+		var e = engine.plugins.input.createInputEvent(event, true);
 		engine.plugins.input.keys[e.key] = 1;
 		engine.plugins.scene.key(e, true);
 		if(event.keyCode != 116)
@@ -44,7 +45,7 @@ engine.plugins.input = {
 	},
 
 	onKeyRelease : function(event) {
-		var e = engine.plugins.input.createInputEvent(event);
+		var e = engine.plugins.input.createInputEvent(event, false);
 		engine.plugins.input.keys[e.key] = 0;
 		engine.plugins.scene.key(e, false);
 		if(event.keyCode != 116)
@@ -56,6 +57,7 @@ engine.plugins.input = {
 	},
 
 	isMouseButtonDown : function(button) {
+		console.log(engine.plugins.input.buttons[button]);
 		return engine.plugins.input.buttons[button];
 	}
 }

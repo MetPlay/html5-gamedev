@@ -83,8 +83,8 @@ engine.plugins.scene = {
 
 				(function(self, drawing) {
 					drawing.context.save();
-					drawing.context.scale(self.scale.x, self.scale.y);
 					drawing.context.translate(self.position.x, self.position.y);
+					drawing.context.scale(self.scale.x, self.scale.y);
 					drawing.context.rotate(self.rotation * Math.PI / 180);
 
 					for(index in self.backChildren) {

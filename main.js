@@ -28,8 +28,12 @@ window.onload = function() {
 					self.position.x = engine.plugins.input.mouse_position.x;
 					self.position.y = engine.plugins.input.mouse_position.y;
 					self.rotation += self.tag.rotation_speed;
+					self.scale.x = self.scale.y = engine.plugins.input.isMouseButtonDown(0) ? 2 : 1;
 				},
 				onMouse : function(event) {
+					console.log(event);
+				},
+				onKey : function(event) {
 					console.log(event);
 				}
 			});
