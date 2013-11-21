@@ -55,6 +55,8 @@ engine.plugins.scene = {
 			active : true,
 			frontChildren : [],
 			backChildren : [],
+			children : [],
+
 			parent : null,
 
 			image : temp_image,
@@ -65,10 +67,12 @@ engine.plugins.scene = {
 					(frontOrBack ? this.frontChildren : this.backChildren).push(child);
 				else
 					(frontOrBack ? this.frontChildren : this.backChildren).push(child = engine.plugins.scene.createTransform(child));
+
+				this.children.push(child);
 				return child;
 			},
 
-			render : predef.render || function(self, drawing) {
+			render : predef.render ? predef.render : function(self, drawing) {
 				if(self.image) {
 					drawing.context.drawImage(self.image, -self.center.x, -self.center.y);
 				}
@@ -81,7 +85,6 @@ engine.plugins.scene = {
 					drawing.context.save();
 					drawing.context.scale(self.scale.x, self.scale.y);
 					drawing.context.translate(self.position.x, self.position.y);
-					drawing.context.translate(self.center.x, self.center.y);
 					drawing.context.rotate(self.rotation * Math.PI / 180);
 
 					for(index in self.backChildren) {
@@ -102,31 +105,48 @@ engine.plugins.scene = {
 						}
 					}
 
-					drawing.context.translate(self.center.x, self.center.y);
 					drawing.context.restore();
 				})(this, engine.drawing);
 			},
 
-			update : function(self) {},
+			update : predef.update ?  predef.update : function(self) {},
 
 			deepUpdate : function() {
 				(function(self) {
 					if(self.active) {
 						self.update(self);
 
-						for(index in self.backChildren) {
-							if(self.backChildren[index] && self.backChildren[index].render) {				
-								self.backChildren[index].deepUpdate();
-							}
-						}
-
-						for(index in self.frontChildren) {
-							if(self.frontChildren[index] && self.frontChildren[index].render) {				
-								self.frontChildren[index].deepUpdate();
+						for(index in self.children) {
+							if(self.children[index] && self.children[index].render) {				
+								self.children[index].deepUpdate();
 							}
 						}
 					}
 				})(this);
+			},
+
+			onMouse : predef.onMouse ? predef.onMouse : null,
+
+			onKey : predef.onKey ? predef.onKey : null,
+
+			mouse : function(event) {
+				if(this.onMouse) this.onMouse(event);
+
+				for(index in this.children) {
+					if(this.children[index] && this.children[index].mouse) {				
+						this.children[index].mouse(event);
+					}
+				}
+			},
+
+			key : function(event) {
+				if(this.onKey) this.onKey(event);
+
+				for(index in this.children) {
+					if(this.children[index] && this.children[index].key) {
+						this.children[index].key(event);
+					}
+				}
 			}
 		};
 	},
@@ -141,6 +161,14 @@ engine.plugins.scene = {
 		if(this.stage && this.stage.deepUpdate) {
 			this.stage.deepUpdate();
 		}
+	},
+
+	mouse : function(event) {
+		this.stage.mouse(event);
+	},
+
+	key : function(event) {
+		this.stage.key(event);
 	}
 };
 

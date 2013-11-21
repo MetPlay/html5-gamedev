@@ -24,7 +24,7 @@ var engine = {
 
 		window.onresize = fixWindow;
 
-		fixWindow();
+		fitWindow(engine.drawing.canvas);
 		callback();
 		fixWindow();
 	}
