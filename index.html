@@ -3,20 +3,17 @@
 <head>
 	<title>Red Baron!</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="engine.js"></script>
-	<script src="asset_manager.plugin.js"></script>
-	<script src="main.js"></script>
-	<script type="text/javascript">
-		window.onclick = function(event) {
-			console.log(event);
-		}
 
-		window.onkeypress = function(event) {
-			if(event.keyCode == 97) {
-				console.log("AAAA!");
-			}
-		}
-	</script>
+	<!-- ENGINE CORE -->
+	<script src="engine.js"></script>
+
+	<!-- PLUGINS -->
+	<script src="asset_manager.plugin.js"></script>
+	<script src="scene.plugin.js"></script>
+	<script src="input.plugin.js"></script>	
+
+	<!-- MAIN -->
+	<script src="main.js"></script>
 </head>
 <body>
 	<canvas id="crtez" width="640" height="480">
