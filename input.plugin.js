@@ -1,4 +1,22 @@
 engine.plugins.input = {
+	getMousePosition : function(e) {
+		var posx = 0;
+		var posy = 0;
+		
+		if (!e) var e = window.event;
+		if (e.pageX || e.pageY) 	{
+			posx = e.pageX;
+			posy = e.pageY;
+		} else if (e.clientX || e.clientY) 	{
+			posx = e.clientX + document.body.scrollLeft
+				+ document.documentElement.scrollLeft;
+			posy = e.clientY + document.body.scrollTop
+				+ document.documentElement.scrollTop;
+		}
+
+		return { x : posx, y : posy }
+	},
+	
 	createInputEvent : function(event, pressOrRelease) {
 		var t = event.type;
 		if(t == "mousedown" || t == "mouseup") {
@@ -6,7 +24,9 @@ engine.plugins.input = {
 		} else if(t == "keydown" || t == "keyup") {
 			return { key : event.keyCode, char : event.charCode, state : pressOrRelease };
 		} else if(t == "mousemove") {
-			return { x : event.offsetX, y : event.offsetY, state : pressOrRelease };
+			var xy = this.getMousePosition(event);
+			xy.state = pressOrRelease;
+			return xy;
 		}
 	},
 
@@ -17,7 +37,7 @@ engine.plugins.input = {
 		x : 0,
 		y : 0
 	},
-	
+
 	onMouseMove : function(event) {
 		var e = engine.plugins.input.createInputEvent(event, undefined);
 		engine.plugins.input.mouse_position.x = e.x;
