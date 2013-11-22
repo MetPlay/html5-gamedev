@@ -1,10 +1,42 @@
 
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
 var engine = {
+	constants : {},
+	core : {
+		time : {
+			scale : {
+				__const : 1,
+				view : 1,
+			},
+
+			moment : {
+				now : 0,
+				then : 0,
+				delta : 0
+			},
+
+			measure : function() {
+				this.moment.now = Date.now();
+				this.moment.delta = (this.moment.now - this.moment.then) / 1000;
+				this.moment.then = this.moment.now;
+			},
+
+			delta : function(scale) {
+				scale = scale || "__const";
+				return this.moment.delta * this.scale[scale];
+			}
+		},
+	},
 	config : {},
 	drawing : {},
 	plugins : {},
-
-	// CONTENT PIPELINE
 
 	self : function(callback) {
 		var fitWindow = function(element) {

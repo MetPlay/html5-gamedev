@@ -1,10 +1,10 @@
-engine.plugins.input = {
-	getMousePosition : function(e) {
+
+engine.core.getMousePosition = function(e) {
 		var posx = 0;
 		var posy = 0;
 		
 		if (!e) var e = window.event;
-		if (e.pageX || e.pageY) 	{
+		if (e.pageX || e.pageY) {
 			posx = e.pageX;
 			posy = e.pageY;
 		} else if (e.clientX || e.clientY) 	{
@@ -17,19 +17,21 @@ engine.plugins.input = {
 		return { x : posx, y : posy }
 	},
 	
-	createInputEvent : function(event, pressOrRelease) {
+engine.core.createInputEvent = function(event, pressOrRelease) {
 		var t = event.type;
 		if(t == "mousedown" || t == "mouseup") {
 			return { button : event.button, x : event.offsetX, y : event.offsetY, state : pressOrRelease };
 		} else if(t == "keydown" || t == "keyup") {
 			return { key : event.keyCode, char : event.charCode, state : pressOrRelease };
 		} else if(t == "mousemove") {
-			var xy = this.getMousePosition(event);
+			var xy = engine.core.getMousePosition(event);
 			xy.state = pressOrRelease;
 			return xy;
 		}
 	},
 
+
+engine.plugins.input = {
 	keys : {},
 	buttons : {},
 
@@ -39,25 +41,25 @@ engine.plugins.input = {
 	},
 
 	onMouseMove : function(event) {
-		var e = engine.plugins.input.createInputEvent(event, undefined);
+		var e = engine.core.createInputEvent(event, undefined);
 		engine.plugins.input.mouse_position.x = e.x;
 		engine.plugins.input.mouse_position.y = e.y;
 	},
 
 	onMouseDown : function(event) {
-		var e = engine.plugins.input.createInputEvent(event, true);
+		var e = engine.core.createInputEvent(event, true);
 		engine.plugins.input.buttons[e.button] = 1;
 		engine.plugins.scene.mouse(e, true);
 	},
 
 	onMouseUp : function(event) {
-		var e = engine.plugins.input.createInputEvent(event, false);
+		var e = engine.core.createInputEvent(event, false);
 		engine.plugins.input.buttons[e.button] = 0;		
 		engine.plugins.scene.mouse(e, false);
 	},
 
 	onKeyPress : function(event) {
-		var e = engine.plugins.input.createInputEvent(event, true);
+		var e = engine.core.createInputEvent(event, true);
 		engine.plugins.input.keys[e.key] = 1;
 		engine.plugins.scene.key(e, true);
 		if(event.keyCode != 116)
@@ -65,7 +67,7 @@ engine.plugins.input = {
 	},
 
 	onKeyRelease : function(event) {
-		var e = engine.plugins.input.createInputEvent(event, false);
+		var e = engine.core.createInputEvent(event, false);
 		engine.plugins.input.keys[e.key] = 0;
 		engine.plugins.scene.key(e, false);
 		if(event.keyCode != 116)
@@ -77,7 +79,6 @@ engine.plugins.input = {
 	},
 
 	isMouseButtonDown : function(button) {
-		console.log(engine.plugins.input.buttons[button]);
 		return engine.plugins.input.buttons[button];
 	}
 }
