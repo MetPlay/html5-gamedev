@@ -18,7 +18,7 @@ engine.core.asset = function(resource) {
 	return this;
 }
 
-engine.core.animation = function(animation) {
+engine.core.animation = function(animation, __assets) {
 	this.repeat = animation.repeat || engine.constants.repeat_types.STOP_AT_END;
 	this.frames = [];
 	if(animation.frames) {
@@ -38,25 +38,26 @@ engine.core.animation = function(animation) {
 	this.next = function() {
 		if(this.frame_at < this.frames.length - 1) {
 			this.frame_at++;
+			return false;
 		} else if(this.repeat == engine.constants.repeat_types.LOOP) {
 			this.frame_at = 0;
+			return false;
 		}
+
+		return true;
 	}
 
+	// true only on animation end
 	this.update = function() {
 		this.change_in += engine.core.time.delta();
 		if(this.change_in >= this.speed) {
-			this.change_in = 0;
-			this.next();
-		}
+			this.change_in = 0;			
+			return this.next();
+		} else return false;
 	}
 
 	this.present = function(self, drawing) {
 		if(drawing) {
-			if(!drawn) {
-				console.log(self);
-				drawn = true;
-			}
 			var asset = engine.plugins.asset_manager.assets[this.frames[this.frame_at]];
 			asset.present(self, drawing);
 		}
@@ -64,6 +65,42 @@ engine.core.animation = function(animation) {
 
 	this.getResource = function() {
 		return engine.plugins.asset_manager.assets[this.frames[this.frame_at]].getResource();
+	}
+
+	this.reset = function() {
+		this.frame_at = 0;
+	}
+
+	return this;
+};
+
+engine.core.sprite = function(sprite, __assets) {
+	this.paths = sprite.paths || {};
+	this.idle = sprite.idle || "idle";
+
+	this.path_at = this.idle;
+
+	this.update = function() {
+		if(this.paths[this.path_at]) {
+			// if animation ended
+			if(engine.plugins.asset_manager.assets[this.paths[this.path_at]].update()) {				
+				var old_path = this.path_at;
+				this.path_at = this.idle;
+				engine.plugins.asset_manager.assets[this.paths[old_path]].reset();
+			}
+		}
+	}
+
+	this.present = function(self, drawing) {
+		if(drawing) {
+			if(this.paths[this.path_at]) {
+				engine.plugins.asset_manager.assets[this.paths[this.path_at]].present(self, drawing);
+			}
+		}
+	}
+
+	this.getResource = function() {
+		return engine.plugins.asset_manager.assets[this.paths[this.path_at]].getResource();
 	}
 
 	return this;
@@ -113,6 +150,12 @@ engine.plugins.asset_manager = {
 					img.src = obj.path;
 				} else if(asset[1].type == types.ANIMATION) {
 					_.assets[asset[0]] = new engine.core.animation(asset[1], _.assets);
+					_.asset_count--;
+					if(_.asset_count <= 0) {
+						callback();
+					}
+				} else if(asset[1].type == types.SPRITE) {
+					_.assets[asset[0]] = new engine.core.sprite(asset[1], _.assets);
 					_.asset_count--;
 					if(_.asset_count <= 0) {
 						callback();
