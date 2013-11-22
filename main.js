@@ -4,6 +4,7 @@ window.onload = function() {
 		engine.config = {
 			debug : true,
 			assets : {
+				// slike i prva animacija
 				damir1 : { path : "assets/damir1.png", type : $.asset_types.IMAGE },				
 				damir2 : { path : "assets/damir2.png", type : $.asset_types.IMAGE },				
 				damir3 : { path : "assets/damir3.png", type : $.asset_types.IMAGE },				
@@ -11,9 +12,10 @@ window.onload = function() {
 				damir_idle : { 
 					frames : [ "damir1", "damir2", "damir3", "damir4" ], 
 					type : $.asset_types.ANIMATION,
-					repeat : engine.constants.repeat_types.LOOP
+					repeat : engine.constants.repeat_types.LOOP,
 				},
 
+				// slike i druga animacija
 				damir11 : { path : "assets/damir11.png", type : $.asset_types.IMAGE },				
 				damir22 : { path : "assets/damir22.png", type : $.asset_types.IMAGE },				
 				damir33 : { path : "assets/damir33.png", type : $.asset_types.IMAGE },				
@@ -21,11 +23,16 @@ window.onload = function() {
 				damir_attack : { 
 					frames : [ "damir11", "damir22", "damir33", "damir44" ], 
 					type : $.asset_types.ANIMATION,
-					repeat : engine.constants.repeat_types.STOP_AT_END
+					repeat : engine.constants.repeat_types.STOP_AT_END,
+					speed: 0.1
 				},
 
+				// sprite
 				damir : { 
-					paths : { idle : "damir_idle", attack : "damir_attack" },
+					paths : { 
+						idle : "damir_idle", 
+						attack : "damir_attack" 
+					},
 					type : $.asset_types.SPRITE
 				}
 			}
@@ -39,16 +46,20 @@ window.onload = function() {
 				drawing.context.fillRect(0, 0, drawing.canvas.width, drawing.canvas.height);
 			}
 
-			engine.plugins.scene.stage.addChild({
+			engine.plugins.scene.stage.addChild({				
+				name : "Damir",
+				
 				position : { 
 					x : Math.random() * engine.drawing.canvas.width,
 					y : Math.random() * engine.drawing.canvas.height
 				},
-				name : "Damir",
+				
 				asset : "damir",
+				
 				tag : {
-					rotation_speed : 100 * (Math.random() - 0.5)
+					rotation_speed : 10 * (Math.random() - 0.5)
 				},
+				
 				update : function(self) {
 					self.position.x = engine.plugins.input.mouse_position.x;
 					self.position.y = engine.plugins.input.mouse_position.y;
@@ -59,8 +70,6 @@ window.onload = function() {
 					if(self.asset.update)
 						self.asset.update();
 				},
-				
-				onMouse : function(self, event) {},
 
 				onKey : function(self, event) {
 					self.asset.path_at = "attack";

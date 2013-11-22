@@ -44,7 +44,7 @@ var engine = {
 			element.height = window.innerHeight;
 		};
 
-		engine.drawing.canvas = document.getElementById('crtez');
+		engine.drawing.canvas = document.getElementById('surface');
 		engine.drawing.context = engine.drawing.canvas.getContext("2d");
 
 		var fixWindow = function() {
