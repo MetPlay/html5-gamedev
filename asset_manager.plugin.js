@@ -106,6 +106,22 @@ engine.core.sprite = function(sprite, __assets) {
 	return this;
 };
 
+engine.core.procedural = function(proc, __assets) {
+	this.generator = proc.generator || function(self) {};
+	this.width = proc.width || 0;
+	this.height = proc.height || 0;
+
+	this.update = proc.update || function() {}
+
+	this.present = proc.present || function(self, drawing) {}
+
+	this.getResource = function() {
+		return this;
+	}
+
+	return this;
+};
+
 drawn = false;
 engine.plugins.asset_manager = {
 	asset_types : {

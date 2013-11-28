@@ -1,4 +1,8 @@
 
+Number.prototype.is_between = function(x, y) {
+	return this >= x && this <= y;
+}
+
 Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
