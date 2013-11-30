@@ -22,7 +22,7 @@ engine.core.createInputEvent = function(event, pressOrRelease) {
 		if(t == "mousedown" || t == "mouseup") {
 			return { button : event.button, x : event.offsetX, y : event.offsetY, state : pressOrRelease };
 		} else if(t == "keydown" || t == "keyup") {
-			return { key : event.keyCode, char : event.charCode, state : pressOrRelease };
+			return { key : event.keyCode, state : pressOrRelease };
 		} else if(t == "mousemove") {
 			var xy = engine.core.getMousePosition(event);
 			xy.state = pressOrRelease;
@@ -61,6 +61,7 @@ engine.plugins.input = {
 		var e = engine.core.createInputEvent(event, true);
 		engine.plugins.input.keys[e.key] = 1;
 		engine.plugins.scene.key(e, true);
+		if(event.keyCode == 82 && event.ctrlKey) return
 		if(event.keyCode != 116)
 			event.preventDefault();
 	},
@@ -69,6 +70,7 @@ engine.plugins.input = {
 		var e = engine.core.createInputEvent(event, false);
 		engine.plugins.input.keys[e.key] = 0;
 		engine.plugins.scene.key(e, false);
+		if(event.keyCode == 82 && event.ctrlKey) return
 		if(event.keyCode != 116)
 			event.preventDefault();
 	},
