@@ -93,7 +93,7 @@ engine.core.transform = function(predef) {
 				this.scale.x = x;
 				this.scale.y = y;
 			},
-
+                        
 			addChild : function(child, frontOrBack) {
 				if(!frontOrBack) frontOrBack = true;
 				if(child.__transform)
@@ -106,6 +106,19 @@ engine.core.transform = function(predef) {
 				return child;
 			},
 
+			addBehaviour : function(beh) {
+			        if(engine.behaviour[beh]) {
+			                var b = engine.behaviour[beh];
+			                if(b.type == "update") {
+			                        this.hookUpdate(b.fn);
+			                } else if(b.type == "render") {
+			                        this.hookRender(b.fn);
+			                } else {
+			                        this.hookLateRender(b.fn);
+                                        }
+                                }
+			},
+			
 			hookUpdate : function(hook) {
 				this.updateHooks.push(hook);
 				return this;
