@@ -1,0 +1,7 @@
+
+  ["src/engine.js",
+   "src/asset_manager.js",
+   "src/input.js",
+   "src/scene.js",
+   "src/loading.js",
+   "src/main.js"].load();

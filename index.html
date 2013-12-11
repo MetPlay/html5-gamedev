@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>jsEngine</title>
+	<title>re:engine</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<!--[if IE]><script type="text/javascript" src="lib/excanvas.js"></script><![endif]-->
 
+	<!-- ENGINE -->
+	<script src="src/engine.js"></script>	
+	<script src="src/asset_manager.js"></script>
+	<script src="src/input.js"></script>
+	<script src="src/scene.js"></script>
+	
 	<!-- MAIN -->
-	<script src="reengine.js"></script>
+	<script src="src/loading.js"></script>
+	<script src="src/main.js"></script>
 </head>
 <body>
 	<canvas id="surface" width="640" height="480">
