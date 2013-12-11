@@ -106,17 +106,17 @@ engine.core.transform = function(predef) {
 				return child;
 			},
 
-			addUpdateHook : function(hook) {
+			hookUpdate : function(hook) {
 				this.updateHooks.push(hook);
 				return this;
 			},
 
-			addRenderHook : function(hook) {
+			hookRender : function(hook) {
 				this.renderHooks.push(hook);
 				return this;
 			},
 			
-			addLateRenderHook : function(hook) {
+			hookLateRender : function(hook) {
 				this.lateRenderHooks.push(hook);
 				return this;
 			},
